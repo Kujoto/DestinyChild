@@ -1,6 +1,6 @@
 <template>
   <div>
-  	tpl
+  	tpl--{{msg}}
   </div>
 </template>
 
@@ -14,7 +14,7 @@ module.exports = {
 	},
   data: function () {
     return {
-      msg: 'Hello moto! what`s up,yaoyao'
+      msg: 'Hello，这是组件的模板'
     }
   },
   ready(){

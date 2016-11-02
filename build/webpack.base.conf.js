@@ -1,52 +1,40 @@
 var path = require('path')
 var config = require('../config')
-var utils = require('./utils')
+var cssLoaders = require('./css-loaders')
 var projectRoot = path.resolve(__dirname, '../')
+var webpack = require('webpack')
+var glob = require('glob');
+var entries = getEntry('./src/views/**/*.js'); // 获得入口js文件
+var chunks = Object.keys(entries);
 
-var env = process.env.NODE_ENV
-// check env & config/index.js to decide weither to enable CSS Sourcemaps for the
-// various preprocessor loaders added to vue-loader at the end of this file
-var cssSourceMapDev = (env === 'development' && config.dev.cssSourceMap)
-var cssSourceMapProd = (env === 'production' && config.build.productionSourceMap)
-var useCssSourceMap = cssSourceMapDev || cssSourceMapProd
+// 将样式提取到单独的css文件中，而不是打包到js文件或使用style标签插入在head标签中
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
+
 
 module.exports = {
-  entry: {
-    app: './src/main.js'
-  },
+  entry: entries,
   output: {
     path: config.build.assetsRoot,
-    publicPath: process.env.NODE_ENV === 'production' ? config.build.assetsPublicPath : config.dev.assetsPublicPath,
+    publicPath: config.build.assetsPublicPath,
+	/* ---- 生成的例子 vendors.61714a310523a3df9869.js --- */
+    //filename: '[name].[hash].js'
+	/* ---- 生成的例子 vendors.js?f3aaf25de220e214f84e --- */
     filename: '[name].js'
   },
   resolve: {
     extensions: ['', '.js', '.vue'],
     fallback: [path.join(__dirname, '../node_modules')],
     alias: {
-      'vue$': 'vue/dist/vue',
       'src': path.resolve(__dirname, '../src'),
       'assets': path.resolve(__dirname, '../src/assets'),
-      'components': path.resolve(__dirname, '../src/components')
+      'components': path.resolve(__dirname, '../src/components'),
+      'vux-components': 'vux/src/components'
     }
   },
   resolveLoader: {
     fallback: [path.join(__dirname, '../node_modules')]
   },
   module: {
-    preLoaders: [
-      {
-        test: /\.vue$/,
-        loader: 'eslint',
-        include: projectRoot,
-        exclude: /node_modules/
-      },
-      {
-        test: /\.js$/,
-        loader: 'eslint',
-        include: projectRoot,
-        exclude: /node_modules/
-      }
-    ],
     loaders: [
       {
         test: /\.vue$/,
@@ -63,32 +51,62 @@ module.exports = {
         loader: 'json'
       },
       {
-        test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
-        loader: 'url',
-        query: {
-          limit: 10000,
-          name: utils.assetsPath('img/[name].[hash:7].[ext]')
-        }
-      },
+        test   : /\.css$/,
+        loader : 'style-loader!css-loader'
+    }, 
+    	 {test: /\.less$/, loader: 'style!css!less'},
       {
-        test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
+        test: /\.html$/,
+        loader: 'vue-html'
+      },
+      //字体
+    {
+      test: /\.((ttf|eot|woff|svg)(\?t=[0-9]\.[0-9]\.[0-9]))|(ttf|eot|woff|svg)\??.*$/,
+      loader: 'url?limit=10000&name=fonts/[name].[ext]'
+    },
+    {
+        //test: /\.(png|jpe?g|gif|svg|woff2?|eot|ttf|otf)(\?.*)?$/,
+        test: /\.(png|jpe?g|gif)(\?.*)?$/,
         loader: 'url',
         query: {
           limit: 10000,
-          name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
+          name: path.join(config.build.assetsSubDirectory, '[name].[hash:7].[ext]')
         }
-      }
+    },
+    {
+  		test: /vux.src.*?js$/,
+  		loader: 'babel'
+	}
     ]
-  },
-  eslint: {
-    formatter: require('eslint-friendly-formatter')
   },
   vue: {
-    loaders: utils.cssLoaders({ sourceMap: useCssSourceMap }),
-    postcss: [
-      require('autoprefixer')({
-        browsers: ['last 2 versions']
-      })
-    ]
-  }
+    loaders: cssLoaders()
+  },
+  plugins: [
+    // 提取公共模块
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendors', // 公共模块的名称
+      chunks: chunks,  // chunks是需要提取的模块
+      minChunks: chunks.length
+    }),
+    // 配置提取出的样式文件
+    new ExtractTextPlugin('css/[name].css')
+  ]
+  
+  
+  
+}
+
+function getEntry(globPath) {
+  var entries = {},
+    basename, tmp, pathname;
+
+  glob.sync(globPath).forEach(function (entry) {
+    basename = path.basename(entry, path.extname(entry));
+    tmp = entry.split('/').splice(-3);
+    pathname = '/' + basename; // 正确输出js和html的路径
+    entries[pathname] = entry;
+  });
+  
+  return entries;
 }
