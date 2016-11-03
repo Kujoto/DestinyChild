@@ -45,7 +45,7 @@ function getEntry(globPath) {
   return entries;
 }
 
-var pages = getEntry('./src/module/**/*.html');
+var pages = getEntry('./src/views/**/*.html');
 
 
 for (var pathname in pages) {
