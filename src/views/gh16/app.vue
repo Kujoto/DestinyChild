@@ -12,7 +12,6 @@
 </style>
 <script>
 import Lib from 'assets/Lib.js'
-
 export default {
   data() {
     return {

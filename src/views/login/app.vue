@@ -68,13 +68,15 @@
 
 import Lib from 'assets/Lib.js'
 
+import C from 'assets/conf';
+
 import Button from 'components/Button';
 
 export default {
   data() {
     return {
-    	appname:Lib.C.appname,
-    	logo:Lib.C.logo,
+    	appname:C.appname,
+    	logo:C.logo,
     	user:{
     		UserName:'lanchenglv.com',
     		PassWord:'lanchenglv.com'
