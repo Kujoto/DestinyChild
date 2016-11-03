@@ -121,6 +121,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
+
 html{
 	.color_main{color: red;}
 }

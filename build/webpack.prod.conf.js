@@ -13,15 +13,15 @@ module.exports = merge(baseWebpackConfig, {
   //devtool: config.build.productionSourceMap ? '#source-map' : false,
   output: {
     path: config.build.assetsRoot,
-    filename: path.join(config.build.assetsSubDirectory, '[name].js'),
-    chunkFilename: path.join(config.build.assetsSubDirectory, '[id].js')
+    filename: path.join(config.build.assetsSubDirectory, '[name].js'),//js输出路径
+    chunkFilename: path.join(config.build.assetsSubDirectory, '[id].js')//非入口js输出路径
   },
-  vue: {
-    loaders: cssLoaders({
-      sourceMap: config.build.productionSourceMap,
-      extract: true
-    })
-  },
+  // vue: {
+  //   loaders: cssLoaders({
+  //     sourceMap: config.build.productionSourceMap,
+  //     extract: true
+  //   })
+  // },
   plugins: [
     // http://vuejs.github.io/vue-loader/workflow/production.html
     new webpack.DefinePlugin({
@@ -64,7 +64,7 @@ function getEntry(globPath) {
   glob.sync(globPath).forEach(function (entry) {
     basename = path.basename(entry, path.extname(entry));
     tmp = entry.split('/').splice(-3);
-    pathname = tmp.splice(0, 1) + '/' + basename; // 正确输出js和html的路径
+    pathname = tmp.splice(0, 1) + '/' + basename; // 正确html的路径
     entries[pathname] = entry;
   });
   console.log(entries);
@@ -87,7 +87,7 @@ for (var pathname in pages) {
 
   if (pathname in module.exports.entry) {
     conf.chunks = ['vendors', pathname];
-    conf.hash = true;
+    conf.hash = true;//插入的js css 是否带hash值
   }
   
   module.exports.plugins.push(new HtmlWebpackPlugin(conf));

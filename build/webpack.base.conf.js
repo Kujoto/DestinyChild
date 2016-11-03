@@ -62,16 +62,16 @@ module.exports = {
       //字体
     {
       test: /\.((ttf|eot|woff|svg)(\?t=[0-9]\.[0-9]\.[0-9]))|(ttf|eot|woff|svg)\??.*$/,
-      loader: 'url?limit=10000&name=fonts/[name].[ext]'
+      loader: 'url?limit=10000&name=static/fonts/[name].[ext]'
     },
     {
         //test: /\.(png|jpe?g|gif|svg|woff2?|eot|ttf|otf)(\?.*)?$/,
         test: /\.(png|jpe?g|gif)(\?.*)?$/,
-        loader: 'url',
-        query: {
-          limit: 10000,
-          name: path.join(config.build.assetsSubDirectory, '[name].[hash:7].[ext]')
-        }
+        loader: 'file-loader?name=static/img/[name].[ext]',
+        // query: {
+        //   limit: 10000,
+        //   name: path.join(config.build.assetsSubDirectory, 'img/[name].[ext]')//网页内引用图片生成路径
+        // }
     },
     {
   		test: /vux.src.*?js$/,
@@ -90,7 +90,7 @@ module.exports = {
       minChunks: chunks.length
     }),
     // 配置提取出的样式文件
-    new ExtractTextPlugin('css/[name].css')
+    //new ExtractTextPlugin('static/[name].css')
   ]
   
   
@@ -104,7 +104,7 @@ function getEntry(globPath) {
   glob.sync(globPath).forEach(function (entry) {
     basename = path.basename(entry, path.extname(entry));
     tmp = entry.split('/').splice(-3);
-    pathname = '/' + basename; // 正确输出js和html的路径
+    pathname = tmp.splice(0, 1) + '/' + basename; // 正确输出js和css的路径
     entries[pathname] = entry;
   });
   
