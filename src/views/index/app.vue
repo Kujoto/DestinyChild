@@ -15,6 +15,10 @@ import moduleHead from 'components/module-head/module-head'
 
 import test from 'assets/lib/test.js'
 
+import ajax from 'assets/lib/ajax.js'
+
+window.ajax = ajax;
+
 export default {
   data() {
     return {

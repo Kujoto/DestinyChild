@@ -35,7 +35,7 @@ webpack
         |---index.js              主入口js
         |---app.vue               页面组件
 ```
-编译之后的生成环境
+编译之后的生产环境
 ``` 
 webpack
   |---dist
