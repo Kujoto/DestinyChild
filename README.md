@@ -24,14 +24,14 @@ webpack
       |---font/                 字体图标
       |---lib/                  js模块
       |---base.css              基础样式
-    |---components            组件
-      |---module-head           Vue组件
+    |---components            Vue组件
+      |---module-head           module-head组件
         |---img/                  组件图片
         |---module-head.vue       组件
     |---views                 页面
       |---index                 主页
         |---img/                  页面图片
-        |---index.html            页面
+        |---index.html            index页面
         |---index.js              主入口js
         |---app.vue               页面组件
 ```
