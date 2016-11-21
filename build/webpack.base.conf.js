@@ -67,7 +67,7 @@ module.exports = {
     {
         //test: /\.(png|jpe?g|gif|svg|woff2?|eot|ttf|otf)(\?.*)?$/,
         test: /\.(png|jpe?g|gif)(\?.*)?$/,
-        loader: 'file-loader?name=static/img/[name].[ext]',
+        loader: 'file-loader?name=static/img/[name]_[hash:4].[ext]',
         // query: {
         //   limit: 10000,
         //   name: path.join(config.build.assetsSubDirectory, 'img/[name].[ext]')//网页内引用图片生成路径

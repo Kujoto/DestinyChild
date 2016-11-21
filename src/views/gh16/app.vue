@@ -11,7 +11,6 @@
 #hplogo{height:230px;outline:none;overflow:hidden;position:relative;margin: 0 auto; width:408px;-moz-user-select:-moz-none;-ms-user-select:none;-webkit-tap-highlight-color:transparent;-webkit-user-select:none}#fpdoodle #hplogo{height:360px;width:640px}#hplogo canvas{background:url(img/cta_bg.png) no-repeat center;background-size:contain;height:100%;width:100%}#dood #hplogo canvas{background:url(img/cta_bg.png) no-repeat;background-size:contain;cursor:pointer;height:100%;width:100%}#fpdoodle,#sadoodle{background:#000}</style>
 </style>
 <script>
-import Lib from 'assets/Lib.js'
 export default {
   data() {
     return {

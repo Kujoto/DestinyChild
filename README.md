@@ -1,74 +1,39 @@
----
-title: vue-cli + webpack 多页面实例配置方法
-date: 2016-8-26
-tags: 
--	vuejs
--	多页面
--	webpack
 
----
-## vue+webpack是否有多页面
-
-目前使用vue来做项目，估计大部分都是单页面（SPA）应用，一个轻型的 MVVM 框架，谁用了MVVM框架，就再也回不去JQ时代了，哈哈。
-
-在手机端的项目，使用vue + vue-router是high到爆，不仅仅是我们开发的而言，最主要的用户体检也是开足马力，体检感杠杠的。
-
-那问题来了，使用vue+webpack的单页面是爽到爆，那如果是多页面也能不能high到爆呢？那当然呀，必须的必，vue、webpack的忠粉（哈哈，好像这忠粉不关系到多页面的）。
-
-在谷歌找vue 多页面，实例还是比较少，功夫不负有心人，在yaoyao1987那找到了，具体可以到这个[yaoyao1987 github][1]，非常感谢yaoyao1987童鞋，今天要讲的内容是基于yaoyao1987童鞋的多页面实例上再优化的。
-
-## 优化了点啥
-
-### demo、github地址
-1、demo：http://v.lanchenglv.com/demo/vue-cli-multi-page/module/login.html 
-2、github：https://github.com/bluefox1688/vue-cli-multi-page
-
-### 优化的内容
-我们先来讲讲，具体我们优化了什么内容。
-
- 1. 增加全局统一使用的模块`Lib.js`库，可能这里看不明白，不要紧，后面会讲到。
- 2. 支持字体图标
- 3. 增加干净的页面、组件的模板，复制即可以使用。
- 4. 去掉多余的代码注释，坑了我的注释，别再坑人了
- 5. 构建时，增加对css打包的支持
- 6. 提取公共模块
-........
+## vue 多页面
 
 ## 使用方法
 ``` bash
 # 安装
 npm install
 
-# 调试环境 serve with hot reload at http://localhost:8083/module/login.html
+# 调试环境 serve with hot reload at http://localhost:8083/views/index.html
 npm run dev
 
 # 生产环境 build for production with minification
 npm run build
 
 ```
-本地默认访问端口为8083，需要更改的童鞋请到项目根目录文件`config.js`修改。
 
 ### 目录结构
 ``` 
 webpack
- |---build
-   |---src
-     |---assets 资源
-     	 |---css.css  css
-         |---img  图片文件
-         |---font/  字体图标
-     |---components 组件
-     	  |---Button.vue  按钮组件
-          |---module-head.vue  head组件
-     |---module各个页面模块
-       |---login    登陆模块
-         |---login.html
-         |---login.js
-         |---app.vue
-       |---welcome       欢迎页模块
-         |---welcome.html
-         |---welcome.js
-         |---app.vue
+  |---src
+    |---assets    # 资源
+      |---css.css  css
+        |---img  图片文件
+        |---font/  字体图标
+    |---components 组件
+      |---Button.vue  按钮组件
+        |---module-head.vue  head组件
+    |---module各个页面模块
+      |---login    登陆模块
+        |---login.html
+        |---login.js
+        |---app.vue
+      |---welcome       欢迎页模块
+        |---welcome.html
+        |---welcome.js
+        |---app.vue
   ```
 从目录结构上，各种组件、页面模块、资源等都按类新建了文件夹，方便我们储存文件。
 其实我们所有的文件，最主要都是放在`module`文件夹里，以文件夹名为html的名称。
