@@ -39,8 +39,8 @@ webpack
 ``` 
 webpack
   |---dist
-    |---static                全局资源
-      |---img/                  全局图片
+    |---static                资源
+      |---img/                  图片
       |---font/                 字体图标
       |---views/                页面js
         |---index.js               index.js
