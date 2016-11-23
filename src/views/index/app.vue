@@ -10,15 +10,12 @@
 
 <script>
 import 'assets/base.css'
-
 import moduleHead from 'components/module-head/module-head'
-
 import test from 'assets/lib/test.js'
-
-import ajax from 'assets/lib/ajax.js'
-
-window.ajax = ajax;
-
+import $ from 'assets/lib/jquery.js'
+import phoneViewport from 'assets/lib/phoneViewport.js'
+phoneViewport();
+window.$ = $;
 export default {
   data() {
     return {
