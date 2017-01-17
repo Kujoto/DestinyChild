@@ -34,7 +34,7 @@ module.exports = merge(baseWebpackConfig, {
         warnings: false
       }
     }),
-    new CleanPlugin(['../dist']), //清空生成目录
+    //new CleanPlugin(['../dist']), //清空生成目录
     new webpack.optimize.OccurenceOrderPlugin(),
     // extract css into its own file
     // generate dist index.html with correct asset hash for caching.
@@ -78,7 +78,7 @@ for (var pathname in pages) {
 	
   // 配置生成的html文件，定义路径等
   var conf = {
-    filename: pathname + '.html',
+    filename: 'web/WEB-INF/' + pathname + '.jsp',
     template: pages[pathname],   // 模板路径
     inject: true              // js插入位置
 

@@ -45,9 +45,7 @@ var Rxports = function (num) {
 
                 return false;
 
-            }
-
-            else {
+            }else {
 
                 //将15位身份证转成18位
 
@@ -142,3 +140,4 @@ var Rxports = function (num) {
     }
 	
 module.exports = Rxports
+//

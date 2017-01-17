@@ -3,369 +3,7 @@
  * 2015/10/01~2015/12/28
  * By Nano
 */
-(function (global) {
-    var support = {};
-    nano = function (selector, context) {
-        return new nano.fn.init(selector, context);
-    };
-    nano.fn = nano.prototype = {
-    };
-    nano.extend = nano.fn.extend = function () {
-        var options, name, src, copy, copyIsArray, clone,
-            target = arguments[0] || {},
-            i = 1,
-            length = arguments.length,
-            deep = false;
-
-        // Handle a deep copy situation
-        if (typeof target === "boolean") {
-            deep = target;
-
-            // Skip the boolean and the target
-            target = arguments[i] || {};
-            i++;
-        }
-
-        // Handle case when target is a string or something (possible in deep copy)
-        if (typeof target !== "object" && !jQuery.isFunction(target)) {
-            target = {};
-        }
-
-        // Extend jQuery itself if only one argument is passed
-        if (i === length) {
-            target = this;
-            i--;
-        }
-
-        for (; i < length; i++) {
-
-            // Only deal with non-null/undefined values
-            if ((options = arguments[i]) != null) {
-
-                // Extend the base object
-                for (name in options) {
-                    src = target[name];
-                    copy = options[name];
-
-                    // Prevent never-ending loop
-                    if (target === copy) {
-                        continue;
-                    }
-
-                    // Recurse if we're merging plain objects or arrays
-                    if (deep && copy && (jQuery.isPlainObject(copy) ||
-                        (copyIsArray = jQuery.isArray(copy)))) {
-
-                        if (copyIsArray) {
-                            copyIsArray = false;
-                            clone = src && jQuery.isArray(src) ? src : [];
-
-                        } else {
-                            clone = src && jQuery.isPlainObject(src) ? src : {};
-                        }
-
-                        // Never move original objects, clone them
-                        target[name] = jQuery.extend(deep, clone, copy);
-
-                        // Don't bring in undefined values
-                    } else if (copy !== undefined) {
-                        target[name] = copy;
-                    }
-                }
-            }
-        }
-
-        // Return the modified object
-        return target;
-    };
-    nano.extend({
-        _extend: function (a, b) { for (var i in b) { a[i] = b[i]; } return a; },
-    });
-    nano.extend({
-        _extend: function (a, b) { for (var i in b) { a[i] = b[i]; } return a; },
-        isReady: true,
-        error: function (msg) {
-            throw new Error(msg);
-        },
-        noop: function () { },
-        isFunction: function (obj) {
-            return jQuery.type(obj) === "function";
-        },
-        isArray: Array.isArray,
-        isWindow: function (obj) {
-            return obj != null && obj === obj.window;
-        },
-        isNumeric: function (obj) {
-            var realStringObj = obj && obj.toString();
-            return !jQuery.isArray(obj) && (realStringObj - parseFloat(realStringObj) + 1) >= 0;
-        },
-        isPlainObject: function (obj) {
-            var key;
-
-            // Not plain objects:
-            // - Any object or value whose internal [[Class]] property is not "[object Object]"
-            // - DOM nodes
-            // - window
-            if (jQuery.type(obj) !== "object" || obj.nodeType || jQuery.isWindow(obj)) {
-                return false;
-            }
-
-            // Not own constructor property must be Object
-            if (obj.constructor &&
-                    !hasOwn.call(obj, "constructor") &&
-                    !hasOwn.call(obj.constructor.prototype || {}, "isPrototypeOf")) {
-                return false;
-            }
-
-            // Own properties are enumerated firstly, so to speed up,
-            // if last one is own, then all properties are own
-            for (key in obj) { }
-
-            return key === undefined || hasOwn.call(obj, key);
-        },
-
-        isEmptyObject: function (obj) {
-            var name;
-            for (name in obj) {
-                return false;
-            }
-            return true;
-        },
-
-        type: function (obj) {
-            if (obj == null) {
-                return obj + "";
-            }
-
-            // Support: Android<4.0, iOS<6 (functionish RegExp)
-            return typeof obj === "object" || typeof obj === "function" ?
-                class2type[toString.call(obj)] || "object" :
-                typeof obj;
-        },
-
-        // Evaluates a script in a global context
-        globalEval: function (code) {
-            var script,
-                indirect = eval;
-
-            code = jQuery.trim(code);
-
-            if (code) {
-
-                // If the code includes a valid, prologue position
-                // strict mode pragma, execute code by injecting a
-                // script tag into the document.
-                if (code.indexOf("use strict") === 1) {
-                    script = document.createElement("script");
-                    script.text = code;
-                    document.head.appendChild(script).parentNode.removeChild(script);
-                } else {
-
-                    // Otherwise, avoid the DOM node creation, insertion
-                    // and removal by using an indirect global eval
-
-                    indirect(code);
-                }
-            }
-        },
-
-        // Convert dashed to camelCase; used by the css and data modules
-        // Support: IE9-11+
-        // Microsoft forgot to hump their vendor prefix (#9572)
-        camelCase: function (string) {
-            return string.replace(rmsPrefix, "ms-").replace(rdashAlpha, fcamelCase);
-        },
-
-        nodeName: function (elem, name) {
-            return elem.nodeName && elem.nodeName.toLowerCase() === name.toLowerCase();
-        },
-
-        each: function (obj, callback) {
-            var length, i = 0;
-
-            if (isArrayLike(obj)) {
-                length = obj.length;
-                for (; i < length; i++) {
-                    if (callback.call(obj[i], i, obj[i]) === false) {
-                        break;
-                    }
-                }
-            } else {
-                for (i in obj) {
-                    if (callback.call(obj[i], i, obj[i]) === false) {
-                        break;
-                    }
-                }
-            }
-
-            return obj;
-        },
-
-        // Support: Android<4.1
-        trim: function (text) {
-            return text == null ?
-                "" :
-                (text + "").replace(rtrim, "");
-        },
-
-        // results is for internal usage only
-        makeArray: function (arr, results) {
-            var ret = results || [];
-
-            if (arr != null) {
-                if (isArrayLike(Object(arr))) {
-                    jQuery.merge(ret,
-                        typeof arr === "string" ?
-                        [arr] : arr
-                    );
-                } else {
-                    push.call(ret, arr);
-                }
-            }
-
-            return ret;
-        },
-
-        inArray: function (elem, arr, i) {
-            return arr == null ? -1 : indexOf.call(arr, elem, i);
-        },
-
-        merge: function (first, second) {
-            var len = +second.length,
-                j = 0,
-                i = first.length;
-
-            for (; j < len; j++) {
-                first[i++] = second[j];
-            }
-
-            first.length = i;
-
-            return first;
-        },
-
-        grep: function (elems, callback, invert) {
-            var callbackInverse,
-                matches = [],
-                i = 0,
-                length = elems.length,
-                callbackExpect = !invert;
-
-            // Go through the array, only saving the items
-            // that pass the validator function
-            for (; i < length; i++) {
-                callbackInverse = !callback(elems[i], i);
-                if (callbackInverse !== callbackExpect) {
-                    matches.push(elems[i]);
-                }
-            }
-
-            return matches;
-        },
-
-        // arg is for internal usage only
-        map: function (elems, callback, arg) {
-            var length, value,
-                i = 0,
-                ret = [];
-
-            // Go through the array, translating each of the items to their new values
-            if (isArrayLike(elems)) {
-                length = elems.length;
-                for (; i < length; i++) {
-                    value = callback(elems[i], i, arg);
-
-                    if (value != null) {
-                        ret.push(value);
-                    }
-                }
-
-                // Go through every key on the object,
-            } else {
-                for (i in elems) {
-                    value = callback(elems[i], i, arg);
-
-                    if (value != null) {
-                        ret.push(value);
-                    }
-                }
-            }
-
-            // Flatten any nested arrays
-            return concat.apply([], ret);
-        },
-
-        // A global GUID counter for objects
-        guid: 1,
-
-        // Bind a function to a context, optionally partially applying any
-        // arguments.
-        proxy: function (fn, context) {
-            var tmp, args, proxy;
-
-            if (typeof context === "string") {
-                tmp = fn[context];
-                context = fn;
-                fn = tmp;
-            }
-
-            // Quick check to determine if target is callable, in the spec
-            // this throws a TypeError, but we will just return undefined.
-            if (!jQuery.isFunction(fn)) {
-                return undefined;
-            }
-
-            // Simulated bind
-            args = slice.call(arguments, 2);
-            proxy = function () {
-                return fn.apply(context || this, args.concat(slice.call(arguments)));
-            };
-
-            // Set the guid of unique handler to the same of original handler, so it can be removed
-            proxy.guid = fn.guid = fn.guid || jQuery.guid++;
-
-            return proxy;
-        },
-
-        now: Date.now,
-
-        // jQuery.support is not used in Core but other projects attach their
-        // properties to it so it needs to exist.
-        support: support
-    });
-    init = nano.fn.init = function (selectora, context) {
-        var match, elem;
-
-        // HANDLE: $(""), $(null), $(undefined), $(false)
-        if (!selector) {
-            return this;
-        }
-
-        // Handle HTML strings
-        if (typeof selector === "string") {
-            // HANDLE: $(DOMElement)
-        } else if (selector.nodeType) {
-            // HANDLE: $(function)
-            // Shortcut for document ready
-        } else if (jQuery.isFunction(selector)) {
-            return rootjQuery.ready(selector);
-        }
-
-        if (selector.selector !== undefined) {
-            this.selector = selector.selector;
-            this.context = selector.context;
-        }
-
-        return jQuery.makeArray(selector, this);
-    },
-    init.prototype = nano.fn;
-    window.nano = window.n = nano;
-    return nano;
-})(window);
 window.onload = (function (windows) {
-
-
-
     //可以获取网页上任何XY坐标的文本
     //var x = 50, y = 100;
     //var range = document.caretRangeFromPoint(x, y);
@@ -432,24 +70,6 @@ window.onload = (function (windows) {
     //    });
 
     //}
-
-   
- 
-
-
-
-
- 
-
-
-
-
-
-
-
-
-
-
 
     //console.log
     log = function () {
@@ -559,3 +179,72 @@ window.onload = (function (windows) {
 
 
 
+!function(a,b){
+    function c(){
+        var b = f.getBoundingClientRect().width;
+        b/i > 540 && (b = 540*i);
+        var c = b/10;
+        f.style.fontSize = c+"px",
+        k.rem = a.rem = c
+    }
+    var d,
+    e = a.document,
+    f = e.documentElement,
+    g = e.querySelector('meta[name="viewport"]'),
+    h = e.querySelector('meta[name="flexible"]'),
+    i = 0,
+    j = 0,
+    k = b.flexible||(b.flexible={});
+    if(g){
+        console.warn("将根据已有的meta标签来设置缩放比例");
+        var l = g.getAttribute("content").match(/initial\-scale=([\d\.]+)/);
+        l && (j = parseFloat(l[1]),i = parseInt(1/j))
+    }else if(h){
+        var m = h.getAttribute("content");
+        if(m){
+            var n = m.match(/initial\-dpr=([\d\.]+)/),
+            o = m.match(/maximum\-dpr=([\d\.]+)/);
+            n && (i = parseFloat(n[1]),
+            j = parseFloat((1/i).toFixed(2))),
+            o && (i=parseFloat(o[1]),
+            j = parseFloat((1/i).toFixed(2)))
+        }
+    }
+    if(!i && !j){
+        var p = (a.navigator.appVersion.match(/android/gi),
+        a.navigator.appVersion.match(/iphone/gi)),
+        q = a.devicePixelRatio;
+        i = p?q>=3&&(!i||i>=3)?3:q>=2&&(!i||i>=2)?2:1:1,
+        j = 1/i
+    }
+    if(f.setAttribute("data-dpr",i), !g)
+        if(g = e.createElement("meta"), g.setAttribute("name","viewport"), g.setAttribute("content","initial-scale="+j+", maximum-scale="+j+", minimum-scale="+j+", user-scalable=no"), f.firstElementChild)
+            f.firstElementChild.appendChild(g);
+        else{
+            var r = e.createElement("div");
+            r.appendChild(g),
+            e.write(r.innerHTML)
+        }
+    a.addEventListener("resize", function(){
+        clearTimeout(d),
+        d = setTimeout(c,300)}, !1),
+        a.addEventListener("pageshow", function(a){
+            a.persisted && (clearTimeout(d), d = setTimeout(c,300))
+        }, !1),
+        "complete" === e.readyState ?
+        e.body.style.fontSize = 12*i+"px" :
+        e.addEventListener("DOMContentLoaded", function(){
+            e.body.style.fontSize = 12*i+"px"
+        }, !1),
+        c(),
+        k.dpr = a.dpr = i,
+        k.refreshRem = c,
+        k.rem2px = function(a){
+            var b = parseFloat(a)*this.rem;
+            return "string" == typeof a && a.match(/rem$/) && (b += "px"), b
+        },
+        k.px2rem = function(a){
+            var b = parseFloat(a)/this.rem;
+            return "string" == typeof a && a.match(/px$/)&&(b += "rem"), b
+        }
+    }(window, window.lib || (window.lib = {}));

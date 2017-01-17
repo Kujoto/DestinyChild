@@ -12,10 +12,7 @@
 import 'assets/base.css'
 import moduleHead from 'components/module-head/module-head'
 import test from 'assets/lib/test.js'
-import $ from 'assets/lib/jquery.js'
-import phoneViewport from 'assets/lib/phoneViewport.js'
-phoneViewport();
-window.$ = $;
+
 export default {
   data() {
     return {
@@ -29,8 +26,6 @@ export default {
     test();
   },
   methods: {
-
-	
   
   }  
 }

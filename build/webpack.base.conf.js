@@ -28,7 +28,8 @@ module.exports = {
       'src': path.resolve(__dirname, '../src'),
       'assets': path.resolve(__dirname, '../src/assets'),
       'components': path.resolve(__dirname, '../src/components'),
-      'vux-components': 'vux/src/components'
+      'vux-components': 'vux/src/components',
+      'vue$': 'vue/dist/vue.js'
     }
   },
   resolveLoader: {
@@ -62,12 +63,12 @@ module.exports = {
       //字体
     {
       test: /\.((ttf|eot|woff|svg)(\?t=[0-9]\.[0-9]\.[0-9]))|(ttf|eot|woff|svg)\??.*$/,
-      loader: 'url?limit=10000&name=static/fonts/[name].[ext]'
+      loader: 'url?limit=10000&name=web/static/fonts/[name].[ext]'
     },
     {
         //test: /\.(png|jpe?g|gif|svg|woff2?|eot|ttf|otf)(\?.*)?$/,
         test: /\.(png|jpe?g|gif)(\?.*)?$/,
-        loader: 'file-loader?name=static/img/[name]_[hash:4].[ext]',
+        loader: 'file-loader?name=web/static/img/[name]_[hash:4].[ext]',
         // query: {
         //   limit: 10000,
         //   name: path.join(config.build.assetsSubDirectory, 'img/[name].[ext]')//网页内引用图片生成路径
