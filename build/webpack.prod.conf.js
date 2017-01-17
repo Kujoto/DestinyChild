@@ -9,6 +9,7 @@ var HtmlWebpackPlugin = require('html-webpack-plugin')
 var CleanPlugin = require('clean-webpack-plugin')//webpack插件，用于清除目录文件
 var glob = require('glob');
 
+
 module.exports = merge(baseWebpackConfig, {
   //devtool: config.build.productionSourceMap ? '#source-map' : false,
   output: {
@@ -74,11 +75,9 @@ function getEntry(globPath) {
 var pages = getEntry('./src/views/**/*.html');
 
 for (var pathname in pages) {
-
-	
   // 配置生成的html文件，定义路径等
   var conf = {
-    filename: 'web/WEB-INF/' + pathname + '.jsp',
+    filename: config.build.assetsRoot + '/' + pathname.split('/')[1] + '.html',
     template: pages[pathname],   // 模板路径
     inject: true              // js插入位置
 

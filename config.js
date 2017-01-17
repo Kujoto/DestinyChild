@@ -2,11 +2,11 @@
 var path = require('path')
 
 module.exports = {
-  build: {
-    index: path.resolve(__dirname, 'dist/index.html'),
-    assetsRoot: path.resolve(__dirname, '../'),
-    assetsSubDirectory: 'web/static',
-    assetsPublicPath: process.env.NODE_ENV === 'production' ? '../' : '/',
+  build: {//生成生产文件路径配置
+    index: path.resolve(__dirname, 'dist/index.html'),//主页
+    assetsRoot: path.resolve(__dirname, './dist'),//根目录
+    assetsSubDirectory: 'static',//静态资源目录
+    assetsPublicPath: process.env.NODE_ENV === 'production' ? '' : '/',//公共目录
     productionSourceMap: true,
     watch: true
   },

@@ -10,7 +10,6 @@ var chunks = Object.keys(entries);
 // 将样式提取到单独的css文件中，而不是打包到js文件或使用style标签插入在head标签中
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-
 module.exports = {
   entry: entries,
   output: {
@@ -63,12 +62,12 @@ module.exports = {
       //字体
     {
       test: /\.((ttf|eot|woff|svg)(\?t=[0-9]\.[0-9]\.[0-9]))|(ttf|eot|woff|svg)\??.*$/,
-      loader: 'url?limit=10000&name=web/static/fonts/[name].[ext]'
+      loader: 'url?limit=10000&name=' + config.build.assetsSubDirectory + '/fonts/[name].[ext]'
     },
     {
         //test: /\.(png|jpe?g|gif|svg|woff2?|eot|ttf|otf)(\?.*)?$/,
         test: /\.(png|jpe?g|gif)(\?.*)?$/,
-        loader: 'file-loader?name=web/static/img/[name]_[hash:4].[ext]',
+        loader: 'file-loader?name=' + config.build.assetsSubDirectory + '/img/[name]_[hash:4].[ext]',
         // query: {
         //   limit: 10000,
         //   name: path.join(config.build.assetsSubDirectory, 'img/[name].[ext]')//网页内引用图片生成路径
