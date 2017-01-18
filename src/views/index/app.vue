@@ -1,10 +1,10 @@
 <template>
-<div>
-
+<div class="container">
   <module-head title="Vue"></module-head>	
-
   <h1>{{de}}<i class="icon iconfont">&#xe6df;</i></h1>
-
+  <input type="text" class="g_input">
+  <a class="g_button">手气不错</a>
+  <a class="g_button red">手气不错</a>
 </div>
 </template>
 
@@ -23,11 +23,11 @@ export default {
     moduleHead
   },
   ready(){
-    test();
+    test()
   },
   methods: {
   
-  }  
+  }
 }
 </script>
 
@@ -38,8 +38,3 @@ text-align: center;
 color: white;
 }
 </style>
-
-
-
-
-
